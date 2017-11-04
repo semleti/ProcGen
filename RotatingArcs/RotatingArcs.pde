@@ -56,14 +56,10 @@ void setup() {
  
     // get colors
     prob = random(100);
-    if(prob<30) style[i*2]=colorBlended(random(1), 255,0,100, 255,0,0, 210);
-    else if(prob<70) style[i*2]=colorBlended(random(1), 0,153,255, 170,225,255, 210);
-    else if(prob<90) style[i*2]=colorBlended(random(1), 200,255,0, 150,255,0, 210);
-    else style[i*2]=color(255,255,255, 220);
-
-    if(prob<50) style[i*2]=colorBlended(random(1), 200,255,0, 50,120,0, 210);
-    else if(prob<90) style[i*2]=colorBlended(random(1), 255,100,0, 255,255,0, 210);
-    else style[i*2]=color(255,255,255, 220);
+    if(prob<30) style[i*2]=colorBlended(random(1), 100,155,230, 50,120,240, 210);
+    else if(prob<70) style[i*2]=colorBlended(random(1), 50,100,255, 0,50,255, 210);
+    else if(prob<90) style[i*2]=colorBlended(random(1), 100,155,200, 100,0,200, 210);
+    else style[i*2]=color(255,215,50, 220);
 
     style[i*2+1]=(int)(random(100))%3;
   }
