@@ -89,12 +89,12 @@ void draw() {
     else if(style[i*2+1]==1) {
       fill(style[i*2]);
       noStroke();
-      arcLineBars(0,0, pt[index++],pt[index++],pt[index++]);
+      arcLineBars(0,0, pt[index++],pt[index++],pt[index++]  + abs(25 - millis()/20.0 % 50));
     }
     else {
       fill(style[i*2]);
       noStroke();
-      arc(0,0, pt[index++],pt[index++],pt[index++]);
+      arc(0,0, pt[index++],pt[index++]  + abs(25 - millis()/50.0 % 50),pt[index++]);
     }
  
     // increase rotation
@@ -129,18 +129,18 @@ void arcLine(float x,float y,float deg,float rad,float w) {
       vertex(cosLUT[i]*rad+x,sinLUT[i]*rad+y);
     }
     endShape();
-    rad += 2;
+    rad += abs(4 - millis()/200.0 % 8);
   }
 }
  
 // Draw arc line with bars
 void arcLineBars(float x,float y,float deg,float rad,float w) {
   int a = int((min (deg/SINCOS_PRECISION,SINCOS_LENGTH-1)));
-  a /= 4;
+  a /= 2;
  
-  beginShape(QUADS);
+  beginShape(TRIANGLES);
   for (int i=0; i<a; i+=4) {
-    vertex(cosLUT[i]*(rad)+x,sinLUT[i]*(rad)+y);
+    //vertex(cosLUT[i]*(rad)+x,sinLUT[i]*(rad)+y);
     vertex(cosLUT[i]*(rad+w)+x,sinLUT[i]*(rad+w)+y);
     vertex(cosLUT[i+2]*(rad+w)+x,sinLUT[i+2]*(rad+w)+y);
     vertex(cosLUT[i+2]*(rad)+x,sinLUT[i+2]*(rad)+y);
@@ -152,7 +152,7 @@ void arcLineBars(float x,float y,float deg,float rad,float w) {
 void arc(float x,float y,float deg,float rad,float w) {
   int a = int(min (deg/SINCOS_PRECISION,SINCOS_LENGTH-1));
   beginShape(QUAD_STRIP);
-  for (int i = 0; i < a; i++) {
+  for (int i = 0; i < abs(a - millis()/100 % (2*a)); i++) {
     vertex(cosLUT[i]*(rad)+x,sinLUT[i]*(rad)+y);
     vertex(cosLUT[i]*(rad+w)+x,sinLUT[i]*(rad+w)+y);
   }
