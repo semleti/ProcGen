@@ -33,7 +33,7 @@ void setup() {
     cosLUT[i]= (float)Math.cos(i*DEG_TO_RAD*SINCOS_PRECISION);
   }
  
-  num = 150;
+  num = 750;
   pt = new float[6*num]; // rotx, roty, deg, rad, w, speed
   style = new int[2*num]; // color, render style
  
@@ -74,7 +74,7 @@ void draw() {
   rotateX(PI/6);
   rotateY(PI/6);
  
-  for (int i = 0; i < num; i++) {
+  for (int i = 0; i < (millis()/50) % num; i++) {
     pushMatrix();
  
     rotateX(pt[index++]);
