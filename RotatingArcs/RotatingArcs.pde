@@ -47,7 +47,7 @@ void setup() {
     pt[index++] = random(60,80); // Short to quarter-circle arcs
     if(random(100)>90) pt[index]=(int)random(8,27)*10;
  
-    pt[index++] = int(random(2,50)*5); // Radius. Space them out nicely
+    pt[index++] = int(random(10,70)*5); // Radius. Space them out nicely
  
     pt[index++] = random(4,32); // Width of band
     if(random(100)>90) pt[index]=random(40,60); // Width of band
