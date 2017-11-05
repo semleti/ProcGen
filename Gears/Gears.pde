@@ -38,6 +38,14 @@ void draw() {
     y = cy + sin(angle) * (radius + toothHeight);
     vertex(x, y);
   }
+  beginContour();
+  for (int t = numberOfTeeth; t >= 0; t--) {
+    angle = t * toothAngle;
+    x = cx + cos(angle) * (radius - 10);
+    y = cy + sin(angle) * ( radius - 10);
+    vertex(x, y);
+  }
+  endContour();
   endShape(CLOSE);
 }
 
@@ -47,7 +55,7 @@ void keyPressed() {
   if (key == 'p') {
     if(!pressed)
     {
-      saveFrame("gear_outer.jpg");
+      saveFrame("gear_emptyCenter.jpg");
       println("saved frame");
       pressed = true;
     }
