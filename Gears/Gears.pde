@@ -57,43 +57,50 @@ void draw() {
 void drawGear(float cx, float cy, int numberOfTeeth, float radius, float innerRadius, float toothHeight, float initialAngle)
 {
   float toothAngle = 2*PI / numberOfTeeth;
-  float angle, x, y;
+  float angle;
   for (int t = 0; t <= numberOfTeeth; t++) {
     angle = t * toothAngle + initialAngle;
-    x = cx + cos(angle) * radius;
-    y = cy + sin(angle) * radius;
-    vertex(x, y);
-    angle = (t+0.5)*toothAngle + initialAngle;
-    x = cx + cos(angle) * (radius + toothHeight);
-    y = cy + sin(angle) * (radius + toothHeight);
-    vertex(x, y);
+    drawTooth(0, cx, cy, angle, radius, toothAngle, toothHeight);
   }
   beginContour();
   for (int t = numberOfTeeth; t >= 0; t--) {
     angle = t * toothAngle + initialAngle;
-    x = cx + cos(angle) * innerRadius;
-    y = cy + sin(angle) * innerRadius;
-    vertex(x, y);
+    vertexAngle(cx, cy, angle, innerRadius * 0.2);
   }
   endContour();
 }
 
-//used to facilitate taking screenshots
-boolean pressed = false;
-void keyPressed() {
-  if(key == 'r')
-  println("r");
-  if (key == 'p') {
-    if(!pressed)
-    {
-      saveFrame(CURRENT_ITERATION_NAME + ".jpg");
-      println("saved frame");
-      pressed = true;
-    }
-  }
-  else
+void drawTooth(int toothStyle, float cx, float cy, float angle, float radius, float toothAngleSize, float toothHeight)
+{
+  switch(toothStyle)
   {
-    pressed = false;
+     case 0:
+       drawToothTriangle(cx, cy, angle, radius, toothAngleSize, toothHeight);
+       break;
+  }
+}
+
+void drawToothTriangle(float cx, float cy, float angle, float radius, float toothAngleSize, float toothHeight)
+{
+  
+  vertexAngle(cx, cy, angle, radius);
+  angle += 0.5 * toothAngleSize;
+  vertexAngle(cx, cy, angle, radius + toothHeight);
+}
+
+//helper function to create vertex
+void vertexAngle(float cx, float cy, float angle, float radius)
+{
+  cx = cx + cos(angle) * (radius);
+  cy = cy + sin(angle) * (radius);
+  vertex(cx, cy);
+}
+
+//used to facilitate taking screenshots
+void keyPressed() {
+  if (key == 'p') {
+    saveFrame(CURRENT_ITERATION_NAME + ".jpg");
+    println("saved frame");
   }
   if (key == 'g') {
     gifExport.finish();          // write file
