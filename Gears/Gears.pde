@@ -4,7 +4,7 @@ import gifAnimation.*;
 
 GifMaker gifExport;
 
-String CURRENT_ITERATION_NAME = "gear_trapezeTeeth";
+String CURRENT_ITERATION_NAME = "gear_toothStyles";
 
 int[] teethNumbers;
 float[] gearRadi;
@@ -39,7 +39,7 @@ void draw() {
     {
       arrayIndex = x*numberOfGearsY+y;
       beginShape();
-      drawGear((x+0.5) * width/numberOfGearsX - width/2,(y+0.5)* height/numberOfGearsY - height/2,teethNumbers[arrayIndex],
+      drawGear(arrayIndex%3, (x+0.5) * width/numberOfGearsX - width/2,(y+0.5)* height/numberOfGearsY - height/2,teethNumbers[arrayIndex],
        gearRadi[arrayIndex], gearRadi[arrayIndex] * (numberOfGearsTotal - arrayIndex) / numberOfGearsTotal ,10,millis()/1000.0);
       endShape(CLOSE);
     }
@@ -52,13 +52,13 @@ void draw() {
   }
 }
 
-void drawGear(float cx, float cy, int numberOfTeeth, float radius, float innerRadius, float toothHeight, float initialAngle)
+void drawGear(int toothStyle, float cx, float cy, int numberOfTeeth, float radius, float innerRadius, float toothHeight, float initialAngle)
 {
   float toothAngle = 2*PI / numberOfTeeth;
   float angle;
   for (int t = 0; t <= numberOfTeeth; t++) {
     angle = t * toothAngle + initialAngle;
-    drawTooth(numberOfTeeth % 2, cx, cy, angle, radius, toothAngle, toothHeight);
+    drawTooth(toothStyle, cx, cy, angle, radius, toothAngle, toothHeight);
   }
   beginContour();
   for (int t = numberOfTeeth; t >= 0; t--) {
@@ -77,6 +77,9 @@ void drawTooth(int toothStyle, float cx, float cy, float angle, float radius, fl
        break;
      case 1:
       drawToothTrapeze(cx, cy, angle, radius, toothAngleSize, toothHeight);
+      break;
+    case 2:
+      drawToothStraightRoundEnd(cx, cy, angle, radius, toothAngleSize, toothHeight);
       break;
   }
 }
@@ -100,6 +103,24 @@ void drawToothTrapeze(float cx, float cy, float angle, float radius, float tooth
   angle += 0.25 * toothAngleSize;
   vertexAngle(cx, cy, angle, radius);
 }
+
+void drawToothStraightRoundEnd(float cx, float cy, float angle, float radius, float toothAngleSize, float toothHeight)
+{
+  vertexAngle(cx, cy, angle, radius);
+  angle += 0.1 * toothAngleSize;
+  vertexAngle(cx, cy, angle, radius+ toothHeight*0.7);
+  angle += 0.1 * toothAngleSize;
+  
+  vertexAngle(cx, cy, angle, radius+ toothHeight);
+  angle += 0.1 * toothAngleSize;
+  vertexAngle(cx, cy, angle, radius+ toothHeight);
+  angle += 0.1 * toothAngleSize;
+  
+  vertexAngle(cx, cy, angle, radius+ toothHeight*0.7);
+  angle += 0.1 * toothAngleSize;
+  vertexAngle(cx, cy, angle, radius);
+}
+
 
 //helper function to create vertex
 void vertexAngle(float cx, float cy, float angle, float radius)
