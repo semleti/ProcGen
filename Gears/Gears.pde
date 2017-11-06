@@ -4,7 +4,7 @@ import gifAnimation.*;
 
 GifMaker gifExport;
 
-String CURRENT_ITERATION_NAME = "gear_toothStyles";
+String CURRENT_ITERATION_NAME = "gear_innerCircle";
 
 int[] teethNumbers;
 float[] gearRadi;
@@ -38,10 +38,8 @@ void draw() {
     for(int y = 0; y < numberOfGearsY; y++)
     {
       arrayIndex = x*numberOfGearsY+y;
-      beginShape();
       drawGear(arrayIndex%3, (x+0.5) * width/numberOfGearsX - width/2,(y+0.5)* height/numberOfGearsY - height/2,teethNumbers[arrayIndex],
        gearRadi[arrayIndex], gearRadi[arrayIndex] * (numberOfGearsTotal - arrayIndex) / numberOfGearsTotal ,10,millis()/1000.0);
-      endShape(CLOSE);
     }
   }
   
@@ -52,20 +50,40 @@ void draw() {
   }
 }
 
+int INNER_PRECISION = 15;
+
 void drawGear(int toothStyle, float cx, float cy, int numberOfTeeth, float radius, float innerRadius, float toothHeight, float initialAngle)
 {
-  float toothAngle = 2*PI / numberOfTeeth;
+  beginShape();
+  float toothAngle = TAU / numberOfTeeth;
   float angle;
   for (int t = 0; t <= numberOfTeeth; t++) {
     angle = t * toothAngle + initialAngle;
     drawTooth(toothStyle, cx, cy, angle, radius, toothAngle, toothHeight);
   }
   beginContour();
-  for (int t = numberOfTeeth; t >= 0; t--) {
-    angle = t * toothAngle + initialAngle;
-    vertexAngle(cx, cy, angle, innerRadius * 0.2);
+  for (int t = INNER_PRECISION; t >= 0; t--) {
+    angle = t * TAU / INNER_PRECISION + initialAngle;
+    vertexAngle(cx, cy, angle, innerRadius);
   }
   endContour();
+  endShape(CLOSE);
+  
+  if(innerRadius > 15)
+  {
+    beginShape();
+    for (int t = 0; t <= INNER_PRECISION; t++) {
+      angle = t * TAU / INNER_PRECISION + initialAngle;
+      vertexAngle(cx, cy, angle, innerRadius * 0.4);
+    }
+    beginContour();
+    for (int t = INNER_PRECISION; t >= 0; t--) {
+      angle = t * TAU / INNER_PRECISION + initialAngle;
+      vertexAngle(cx, cy, angle, innerRadius * 0.2);
+    }
+    endContour();
+    endShape(CLOSE);
+  }
 }
 
 void drawTooth(int toothStyle, float cx, float cy, float angle, float radius, float toothAngleSize, float toothHeight)
