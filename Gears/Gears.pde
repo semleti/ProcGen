@@ -4,7 +4,7 @@ import gifAnimation.*;
 
 GifMaker gifExport;
 
-String CURRENT_ITERATION_NAME = "gear_rectangleSupport";
+String CURRENT_ITERATION_NAME = "gear_tiltedSupport";
 
 int[] teethNumbers;
 float[] gearRadi;
@@ -39,7 +39,7 @@ void draw() {
     {
       arrayIndex = x*numberOfGearsY+y;
       drawGear(arrayIndex%3, (x+0.5) * width/numberOfGearsX - width/2,(y+0.5)* height/numberOfGearsY - height/2,teethNumbers[arrayIndex],
-       gearRadi[arrayIndex], gearRadi[arrayIndex] * 0.8 * (numberOfGearsTotal - arrayIndex) / numberOfGearsTotal ,10,millis()/1000.0);
+       gearRadi[arrayIndex], gearRadi[arrayIndex] *(0.8 - ((float)arrayIndex) / numberOfGearsTotal / 2.0) ,gearRadi[arrayIndex]*0.3,millis()/1000.0);
     }
   }
   
@@ -87,7 +87,7 @@ void drawGear(int toothStyle, float cx, float cy, int numberOfTeeth, float radiu
     int numberOfSupports = 3 + toothStyle;
     for(int i =0; i < numberOfSupports; i++)
     {
-       drawSupport((toothStyle + numberOfTeeth )% 2, cx, cy, i * 2 * PI / numberOfSupports + initialAngle, innerRadius, numberOfSupports);
+       drawSupport((toothStyle + numberOfTeeth )% 3, cx, cy, i * 2 * PI / numberOfSupports + initialAngle, innerRadius, numberOfSupports);
     }
   }
 }
@@ -101,6 +101,9 @@ void drawSupport(int style, float cx, float cy, float angle, float innerRadius, 
       break;
     case 1:
       drawSupportRectangle(cx, cy, angle, innerRadius*1.2, innerRadius * 0.3, numberOfSupports);
+      break;
+    case 2:
+      drawSupportTilted(cx, cy, angle, innerRadius*1.2, innerRadius * 0.3, numberOfSupports);
       break;
   }
 }
