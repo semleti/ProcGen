@@ -4,7 +4,7 @@ import gifAnimation.*;
 
 GifMaker gifExport;
 
-String CURRENT_ITERATION_NAME = "gear_trapezeSupport";
+String CURRENT_ITERATION_NAME = "gear_rectangleSupport";
 
 int[] teethNumbers;
 float[] gearRadi;
@@ -39,7 +39,7 @@ void draw() {
     {
       arrayIndex = x*numberOfGearsY+y;
       drawGear(arrayIndex%3, (x+0.5) * width/numberOfGearsX - width/2,(y+0.5)* height/numberOfGearsY - height/2,teethNumbers[arrayIndex],
-       gearRadi[arrayIndex], gearRadi[arrayIndex] * (numberOfGearsTotal - arrayIndex) / numberOfGearsTotal ,10,millis()/1000.0);
+       gearRadi[arrayIndex], gearRadi[arrayIndex] * 0.8 * (numberOfGearsTotal - arrayIndex) / numberOfGearsTotal ,10,millis()/1000.0);
     }
   }
   
@@ -87,7 +87,7 @@ void drawGear(int toothStyle, float cx, float cy, int numberOfTeeth, float radiu
     int numberOfSupports = 3 + toothStyle;
     for(int i =0; i < numberOfSupports; i++)
     {
-       drawSupport(0, cx, cy, i * 2 * PI / numberOfSupports + initialAngle, innerRadius, numberOfSupports);
+       drawSupport((toothStyle + numberOfTeeth )% 2, cx, cy, i * 2 * PI / numberOfSupports + initialAngle, innerRadius, numberOfSupports);
     }
   }
 }
@@ -99,7 +99,9 @@ void drawSupport(int style, float cx, float cy, float angle, float innerRadius, 
     case 0:
       drawSupportTrapeze(cx, cy, angle, innerRadius*1.2, innerRadius * 0.3, numberOfSupports);
       break;
-
+    case 1:
+      drawSupportRectangle(cx, cy, angle, innerRadius*1.2, innerRadius * 0.3, numberOfSupports);
+      break;
   }
 }
 
@@ -110,6 +112,41 @@ void drawSupportTrapeze(float cx, float cy, float angle, float bigRadius, float 
   vertexAngle(cx, cy, angle, bigRadius);
   angle += PI / numberOfSupports;
   vertexAngle(cx, cy, angle, bigRadius);
+  vertexAngle(cx, cy, angle, smallRadius);
+  endShape(CLOSE);
+}
+
+void drawSupportRectangle(float cx, float cy, float angle, float bigRadius, float smallRadius, int numberOfSupports)
+{
+  float dist = sin(PI / numberOfSupports) * smallRadius;
+  float ang = asin(dist/bigRadius);
+  beginShape();
+  vertexAngle(cx, cy, angle, smallRadius);
+  angle += PI / numberOfSupports - ang;
+  vertexAngle(cx, cy, angle, bigRadius);
+  angle += ang*2.0;
+  vertexAngle(cx, cy, angle, bigRadius);
+  angle += PI / numberOfSupports - ang;
+  vertexAngle(cx, cy, angle, smallRadius);
+  endShape(CLOSE);
+}
+
+void drawSupportTilted(float cx, float cy, float angle, float bigRadius, float smallRadius, int numberOfSupports)
+{
+  float dist = sin(PI / numberOfSupports) * smallRadius;
+  float ang = asin(dist/bigRadius);
+  float decal = PI / numberOfSupports ;
+  if(((int)(numberOfSupports * smallRadius ))%2 == 0)
+  {
+    decal *= -1;
+  }
+  beginShape();
+  vertexAngle(cx, cy, angle, smallRadius);
+  angle += PI / numberOfSupports - ang + decal;
+  vertexAngle(cx, cy, angle, bigRadius);
+  angle += ang*2.0;
+  vertexAngle(cx, cy, angle, bigRadius);
+  angle += PI / numberOfSupports  - ang - decal;
   vertexAngle(cx, cy, angle, smallRadius);
   endShape(CLOSE);
 }
