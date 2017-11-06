@@ -4,7 +4,7 @@ import gifAnimation.*;
 
 GifMaker gifExport;
 
-String CURRENT_ITERATION_NAME = "gear_innerCircle";
+String CURRENT_ITERATION_NAME = "gear_trapezeSupport";
 
 int[] teethNumbers;
 float[] gearRadi;
@@ -83,8 +83,38 @@ void drawGear(int toothStyle, float cx, float cy, int numberOfTeeth, float radiu
     }
     endContour();
     endShape(CLOSE);
+    
+    int numberOfSupports = 3 + toothStyle;
+    for(int i =0; i < numberOfSupports; i++)
+    {
+       drawSupport(0, cx, cy, i * 2 * PI / numberOfSupports + initialAngle, innerRadius, numberOfSupports);
+    }
   }
 }
+
+void drawSupport(int style, float cx, float cy, float angle, float innerRadius, int numberOfSupports)
+{
+  switch(style)
+  {
+    case 0:
+      drawSupportTrapeze(cx, cy, angle, innerRadius*1.2, innerRadius * 0.3, numberOfSupports);
+      break;
+
+  }
+}
+
+void drawSupportTrapeze(float cx, float cy, float angle, float bigRadius, float smallRadius, int numberOfSupports)
+{
+  beginShape();
+  vertexAngle(cx, cy, angle, smallRadius);
+  vertexAngle(cx, cy, angle, bigRadius);
+  angle += PI / numberOfSupports;
+  vertexAngle(cx, cy, angle, bigRadius);
+  vertexAngle(cx, cy, angle, smallRadius);
+  endShape(CLOSE);
+}
+
+
 
 void drawTooth(int toothStyle, float cx, float cy, float angle, float radius, float toothAngleSize, float toothHeight)
 {
@@ -155,10 +185,10 @@ int screenShotNumber = 1;
 void keyPressed() {
   if (key == 'p') {
     if(screenShotNumber == 1)
-    saveFrame(CURRENT_ITERATION_NAME + ".jpg");
+      saveFrame(CURRENT_ITERATION_NAME + ".jpg");
     else
-    saveFrame(CURRENT_ITERATION_NAME + "_" + screenShotNumber + ".jpg");
-    println("saved frame");
+      saveFrame(CURRENT_ITERATION_NAME + "_" + screenShotNumber + ".jpg");
+    println("saved frame " + screenShotNumber);
     screenShotNumber++;
   }
   if (key == 'g') {
